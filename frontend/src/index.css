@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Teko:wght@700&display=swap');
+
+@import "tailwindcss";
+
+*{
+  font-family: "Outfit", sans-serif;
+}
+
+button{
+  cursor: pointer;
+}
+#bg{
+  background: #F5F5DC;
+}
+@layer base{
+input:not([type="checkbox"]){
+  @apply outline-none focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg;
+}
+textarea{
+  @apply outline-none focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg resize-none;
+}
+}
