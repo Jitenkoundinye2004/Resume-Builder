@@ -3,12 +3,13 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { login } from '../app/features/authSlice';
 import toast from 'react-hot-toast';
+import api from '../config/api.js';
 
 const Login = () => {
   const dispatch =useDispatch()
     const query = new URLSearchParams(window.location.search)
-    const urlState =query.get('state  ')
-    const [state, setState] = React.useState( urlState  ||"login");
+    const urlState = query.get('state')
+    const [state, setState] = React.useState(urlState || "login");
 
 
     const [formdata, setformData] = React.useState({
@@ -26,14 +27,15 @@ const Login = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try {
-          const {data}= await api.post(`/api/users/${state}`,formdata)
-          dispatch(login(data))
-          localStorage.setItem('token',data.token)
-          toast.success(data.message)
-          
+          const payload = state === "login" ? { email: formdata.email, password: formdata.password } : formdata;
+          const {data: responseData}= await api.post(`/api/users/${state}`, payload)
+          dispatch(login(responseData))
+          localStorage.setItem('token',responseData.token)
+          toast.success(responseData.message)
+
         } catch (error) {
           toast(error?.response?.data?.message || error.message)
-          
+
         }
 
     };

@@ -17,17 +17,17 @@ const App = () => {
     const token = localStorage.getItem('token');
     try {
       if (token) {
-        const { data } = await api.get('/api/user/data', { headers: { Authorization: token } });
+        const { data } = await api.get('/api/users/data', { headers: { Authorization: `Bearer ${token}` } });
         if (data.user) {
           dispatch(login({ token, user: data.user }));
         }
-        dispatch(setLoading(false)); 
+        dispatch(setLoading(false));
       }else {
           dispatch(setLoading(false));
         }
       }catch (error) {
       dispatch(setLoading(false));
-      console.log(error.message);
+      // console.log(error.message);
     }
   };
 

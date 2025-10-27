@@ -3,7 +3,9 @@
 import jwt from 'jsonwebtoken';
 
 const protect = async (req, res, next) => {
-    const token = req.headers.authorization;
+    const token = req.headers.authorization && req.headers.authorization.startsWith('Bearer ')
+        ? req.headers.authorization.split(' ')[1]
+        : req.headers.authorization;
     if(!token){
         return res.status(401).json({ message: 'Unauthorized' });
     }

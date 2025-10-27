@@ -1,0 +1,4 @@
+- [x] Fix state parameter retrieval in Login.jsx by removing extra spaces in query.get('state')
+- [x] Modify handleSubmit in Login.jsx to send only relevant form data based on state (email/password for login, name/email/password for register)
+- [x] Update api.js to include a fallback baseURL if VITE_BASE_URL is not set
+- [x] Test the login and register functionality
