@@ -1,13 +1,17 @@
 import { Lock, Mail, User2Icon } from 'lucide-react';
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { login } from '../app/features/authSlice';
+import toast from 'react-hot-toast';
 
 const Login = () => {
+  const dispatch =useDispatch()
     const query = new URLSearchParams(window.location.search)
     const urlState =query.get('state  ')
     const [state, setState] = React.useState( urlState  ||"login");
 
 
-    const [data, setData] = React.useState({
+    const [formdata, setformData] = React.useState({
         name: "",
         email: "",
         password: "",
@@ -15,13 +19,22 @@ const Login = () => {
 
 
     const onChangeHandler = (e) => {
-        setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        setformData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-
+        try {
+          const {data}= await api.post(`/api/users/${state}`,formdata)
+          dispatch(login(data))
+          localStorage.setItem('token',data.token)
+          toast.success(data.message)
+          
+        } catch (error) {
+          toast(error?.response?.data?.message || error.message)
+          
+        }
 
     };
   return (
@@ -46,7 +59,7 @@ const Login = () => {
           placeholder="Name"
           className="bg-transparent text-zinc-600 dark:text-[#F5F5DC] placeholder-zinc-500 dark:placeholder-[#D7CCC8] outline-none text-sm w-full h-full"
           name="name"
-          value={data.name}
+          value={formdata.name}
           onChange={onChangeHandler}
           required
         />
@@ -61,7 +74,7 @@ const Login = () => {
         placeholder="Email id"
         className="bg-transparent text-zinc-600 dark:text-[#F5F5DC] placeholder-zinc-500 dark:placeholder-[#D7CCC8] outline-none text-sm w-full h-full"
         name="email"
-        value={data.email}
+        value={formdata.email}
         onChange={onChangeHandler}
         required
       />
@@ -75,7 +88,7 @@ const Login = () => {
         placeholder="Password"
         className="bg-transparent text-zinc-600 dark:text-[#F5F5DC] placeholder-zinc-500 dark:placeholder-[#D7CCC8] outline-none text-sm w-full h-full"
         name="password"
-        value={data.password}
+        value={formdata.password}
         onChange={onChangeHandler}
         required
       />

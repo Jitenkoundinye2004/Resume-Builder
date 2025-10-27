@@ -1,14 +1,28 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../Components/Navbar'
+import { useSelector } from 'react-redux'
+import Loader from '../Components/Loader'
+import Login from './Login'
 
 const Layout = () => {
+
+  const {user, loading} = useSelector((state)=>state.auth)
+
+  if(loading){
+    return <Loader/>
+  }
+
   return (
     <div>
-      <div className='min-h-screen bg-gray-50'>
+      {
+        user ? (<div className='min-h-screen bg-gray-50'>
         <Navbar/>
         <Outlet/>
-      </div>
+      </div>)
+      : <Login/>
+      }
+      
     </div>
   )
 }
