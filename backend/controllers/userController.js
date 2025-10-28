@@ -101,10 +101,10 @@ export const getUserById = async (req, res) => {
 // GET: /api/users/resume
 export const getUserResume = async (req, res) => {
   try {
-    const userId = req.userId;  
-    
+    const userId = req.userId;
+
     // return user resume
-    const resume = await Resume.find({ user: userId });
+    const resume = await Resume.find({ $or: [{ userId }, { userID: userId }] });
     return res.status(200).json({ resume });
     } catch (error) {
     return res.status(400).json({ message: error.message });

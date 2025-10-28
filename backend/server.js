@@ -5,6 +5,7 @@ import connectDB from './configs/db.js';
 import userRoutes from './routes/userRoutes.js';
 import resumeRouter from './routes/resumeRoutes.js';
 import aiRouter from './routes/aiRoutes.js';
+import imageKit from './configs/imageKit.js';
 
 
 
@@ -18,7 +19,8 @@ const PORT = process.env.PORT || 5000;
 await connectDB();
 
 // Middleware
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors());
 
 

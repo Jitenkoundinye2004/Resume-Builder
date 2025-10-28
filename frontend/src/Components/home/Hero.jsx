@@ -1,7 +1,10 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import {Link} from 'react-router-dom';
 const Hero = () => {
     const [menuOpen, setMenuOpen] = React.useState(false);
+    const {user}=useSelector((state)=>state.auth)
+
 
     const logos = [
         'https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg',
@@ -27,12 +30,15 @@ const Hero = () => {
                     </div>
 
                     <div className="flex gap-2">
-                        <Link to='/app?state=register' className="hidden md:block px-6 py-2 bg-[#385A3A] hover:text-white hover:bg-green-700 active:scale-95 transition-all rounded-full text-white">
+                        <Link to='/app?state=register' className="hidden md:block px-6 py-2 bg-[#385A3A] hover:text-white hover:bg-green-700 active:scale-95 transition-all rounded-full text-white" hidden={user}>
                             Get started
                         </Link>
-                        <Link to='/app?state=login' className="hidden md:block px-6 py-2 border active:scale-95 transition-all rounded-full text-black-500 hover:bg-[#385A3A] hover:text-white" >
+                        <Link to='/app?state=login' className="hidden md:block px-6 py-2 border active:scale-95 transition-all rounded-full text-black-500 hover:bg-[#385A3A] hover:text-white" hidden={user} >
                             Login
                         </Link>
+
+                        <Link to ='/app' className='hidden md:block px-8 py-2 bg-[#385A3A]  hover:bg-[#385A3A]active:scale-95 transition-all rounded-full text-white     hover:text-white' hidden={!user}>
+                        Dashboard</Link>
                     </div>
 
                     <button onClick={() => setMenuOpen(true)} className="md:hidden active:scale-90 transition" >
