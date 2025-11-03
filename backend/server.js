@@ -158,6 +158,11 @@ app.get(/^(?!\/api).*/, (req, res, next) => {
   });
 });
 
+app.use((req,res,next)=>{
+  console.log('REQ', req.method, req.path, 'Accept:', req.headers.accept);
+  next();
+});
+
 
 // Start the server
 const server = app.listen(PORT, () => {
