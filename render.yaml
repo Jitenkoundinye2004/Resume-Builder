@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: resume-builder-backend
+    name: resume-builder
     runtime: node
-    buildCommand: cd backend && npm install
+    buildCommand: cd frontend && npm install && npm run build && cd ../backend && npm install
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
@@ -30,13 +30,3 @@ services:
       - key: FRONTEND_URL
         sync: false
     healthCheckPath: /health
-
-  - type: web
-    name: resume-builder-frontend
-    runtime: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: ./frontend/dist
-    pullRequestPreviewsEnabled: true
-    envVars:
-      - key: NODE_ENV
-        value: production
