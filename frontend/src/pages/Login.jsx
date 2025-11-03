@@ -1,4 +1,4 @@
-import { Lock, Mail, User2Icon } from 'lucide-react';
+import { Lock, Mail, User2Icon, Eye, EyeOff } from 'lucide-react';
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { login } from '../app/features/authSlice';
@@ -19,6 +19,8 @@ const Login = () => {
         email: "",
         password: "",
     });
+
+    const [showPassword, setShowPassword] = React.useState(false);
 
 
     const onChangeHandler = (e) => {
@@ -86,18 +88,25 @@ const Login = () => {
       />
     </div>
 
-    <div className="flex items-center mt-4 w-full bg-zinc-100 dark:bg-[#F5F5DC] border border-zinc-300/80 dark:border-transparent h-12 rounded-full overflow-hidden pl-6 gap-2">
+    <div className="flex items-center mt-4 w-full bg-zinc-100 dark:bg-[#F5F5DC] border border-zinc-300/80 dark:border-transparent h-12 rounded-full overflow-hidden pl-6 pr-3 gap-2">
       {/* Lock Icon */}
       <Lock size={16} className="text-gray-500 dark:text-[#333333]" />
       <input
-        type="password"
+        type={showPassword ? "text" : "password"}
         placeholder="Password"
-        className="bg-transparent text-zinc-600 dark:text-[#333333] placeholder-[#333333] dark:placeholder-black outline-none text-sm w-full h-full"
+        className="bg-transparent text-zinc-600 dark:text-[#333333] placeholder-[#333333] dark:placeholder-black outline-none text-sm flex-1 h-full"
         name="password"
         value={formdata.password}
         onChange={onChangeHandler}
         required
       />
+      <button
+        type="button"
+        onClick={() => setShowPassword(!showPassword)}
+        className="text-gray-500 dark:text-[#333333] hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+      >
+        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+      </button>
     </div>
 
     <div className="mt-5 text-left">

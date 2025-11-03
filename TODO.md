@@ -1,24 +1,10 @@
-- [x] Fix state parameter retrieval in Login.jsx by removing extra spaces in query.get('state')
-- [x] Modify handleSubmit in Login.jsx to send only relevant form data based on state (email/password for login, name/email/password for register)
-- [x] Update api.js to include a fallback baseURL if VITE_BASE_URL is not set
-- [x] Test the login and register functionality
-- [x] Fix catch-all route in server.js to use app.get('*') instead of app.use()
-- [x] Create .gitignore files for backend and frontend
-- [x] Create .env.example with all required environment variables
-- [x] Create comprehensive README.md with setup and deployment instructions
-- [x] Update backend package.json scripts (server -> dev)
-- [x] Add error handling for unhandled promise rejections in server.js
-- [x] Optimize Vite config for production builds with code splitting
-- [x] Improve database connection with better error handling
-- [x] Create render.yaml for Render deployment
-- [x] Build frontend for production deployment
-- [x] Add password reset functionality with email links
-- [x] Update User model with reset token fields
-- [x] Implement forgot password and reset password controllers
-- [x] Add forgot/reset password routes
-- [x] Install nodemailer for email sending
-- [x] Create ForgotPassword and ResetPassword frontend components
-- [x] Update routing in App.jsx for password reset pages
-- [x] Update Login.jsx to link to forgot password page
-- [x] Update README.md with new features and API endpoints
-- [x] Update .env.example with email configuration
+- [ ] Fix catch-all route in server.js for proper SPA routing
+- [ ] Add comprehensive error logging to userController.js
+- [ ] Optimize database connection for scalability
+- [ ] Add rate limiting middleware
+- [ ] Add request timeout handling
+- [ ] Improve error responses in registration
+- [ ] Add health check endpoint
+- [ ] Update render.yaml for better production config
+- [ ] Add connection pooling to MongoDB
+- [ ] Add caching for better performance

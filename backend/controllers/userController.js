@@ -16,35 +16,68 @@ const generateToken = (userID) => {
 // POST: /api/users/register
 export const registerUser = async (req, res) => {
   try {
+    console.log('Registration attempt:', { name: req.body.name, email: req.body.email });
+
     const { name, email, password } = req.body;
 
     // check if required fields are present
     if (!name || !email || !password) {
+      console.log('Missing required fields:', { name: !!name, email: !!email, password: !!password });
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    // check if user already exists
-    const user = await User.findOne({ email });
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      console.log('Invalid email format:', email);
+      return res.status(400).json({ message: 'Invalid email format' });
+    }
 
-    if (user) {
+    // Validate password strength
+    if (password.length < 6) {
+      console.log('Password too short');
+      return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+    }
+
+    // check if user already exists
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      console.log('User already exists:', email);
       return res.status(409).json({ message: 'User already exists' });
     }
 
     // create new user
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({
-      name,
-      email,
+    const hashedPassword = await bcrypt.hash(password, 12); // Increased rounds for better security
+    const newUser = new User({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
       password: hashedPassword
     });
 
+    await newUser.save();
+    console.log('User created successfully:', newUser._id);
+
     // return success response
     const token = generateToken(newUser._id);
-    newUser.password = undefined;
-    res.status(201).json({ message: 'User registered successfully', user: newUser, token });
+    const userResponse = {
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email
+    };
+
+    console.log('Registration successful for:', email);
+    res.status(201).json({
+      message: 'User registered successfully',
+      user: userResponse,
+      token
+    });
 
   } catch (error) {
-    return res.status(400).json({ message: 'Server error', error: error.message });
+    console.error('Registration error:', error);
+    return res.status(500).json({
+      message: 'Server error during registration',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
   }
 };
 

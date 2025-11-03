@@ -7,6 +7,9 @@ import resumeRouter from './routes/resumeRoutes.js';
 import aiRouter from './routes/aiRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { apiLimiter } from './middlewares/rateLimit.js';
+import helmet from 'helmet';
+import compression from 'compression';
 // import imageKit from './configs/imageKit.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,10 +32,38 @@ process.on('unhandledRejection', (err) => {
 //DB Connection
 connectDB();
 
+// Security middleware
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
+// Compression middleware for better performance
+app.use(compression());
+
+// Rate limiting
+app.use('/api/', apiLimiter);
+
 // Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(cors());
+
+// CORS configuration
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.FRONTEND_URL || false
+    : ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
+
+// Request timeout
+app.use((req, res, next) => {
+  req.setTimeout(30000); // 30 seconds
+  res.setTimeout(30000);
+  next();
+});
 
 // Serve static files from the frontend dist directory
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
@@ -46,9 +77,14 @@ app.use('/api/users',userRoutes);
 app.use('/api/resumes', resumeRouter);
 app.use('/api/ai',aiRouter);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
 // Catch all handler: send back index.html for any non-API routes
 // This must be placed AFTER all API routes to avoid conflicts
-app.get(/^\/(?!api).*/, (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 

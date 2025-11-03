@@ -11,6 +11,8 @@ services:
         value: 10000
       - key: MONGODB_URI
         sync: false
+      - key: MONGODB_URL
+        sync: false
       - key: JWT_SECRET
         sync: false
       - key: EMAIL_USER
@@ -25,6 +27,9 @@ services:
         sync: false
       - key: OPENAI_API_KEY
         sync: false
+      - key: FRONTEND_URL
+        sync: false
+    healthCheckPath: /health
 
   - type: web
     name: resume-builder-frontend
