@@ -12,3 +12,13 @@
 - [x] Improve database connection with better error handling
 - [x] Create render.yaml for Render deployment
 - [x] Build frontend for production deployment
+- [x] Add password reset functionality with email links
+- [x] Update User model with reset token fields
+- [x] Implement forgot password and reset password controllers
+- [x] Add forgot/reset password routes
+- [x] Install nodemailer for email sending
+- [x] Create ForgotPassword and ResetPassword frontend components
+- [x] Update routing in App.jsx for password reset pages
+- [x] Update Login.jsx to link to forgot password page
+- [x] Update README.md with new features and API endpoints
+- [x] Update .env.example with email configuration

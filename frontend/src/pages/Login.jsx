@@ -101,12 +101,13 @@ const Login = () => {
     </div>
 
     <div className="mt-5 text-left">
-      <a
+      <button
+        type="button"
         className="text-sm text-indigo-500 dark:text-[#ffffff] dark:hover:underline"
-        href="#"
+        onClick={() => navigate('/forgot-password')}
       >
         Forgot password?
-      </a>
+      </button>
     </div>
 
     <button

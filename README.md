@@ -4,13 +4,14 @@ A full-stack web application for creating and managing professional resumes with
 
 ## Features
 
-- User authentication (register/login)
+- User authentication (register/login/forgot password)
 - Resume creation and editing
 - Multiple resume templates
 - AI-powered content suggestions
 - Image upload for profile pictures
 - PDF export functionality
 - Responsive design
+- Password reset via email
 
 ## Tech Stack
 
@@ -65,7 +66,7 @@ Create a `.env` file in the `backend` directory with the following variables:
 
 ```env
 # Database Configuration
-MONGODB_URL=mongodb://localhost:27017
+MONGODB_URL=mongodb://localhost:27017/resume-builder
 
 # JWT Secret
 JWT_SECRET=your_jwt_secret_here
@@ -78,9 +79,17 @@ IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your_imagekit_id
 # AI Configuration (OpenAI compatible)
 GEMINI_API_KEY=your_gemini_api_key
 OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_API_KEY=your_openai_api_key
+
+# Email Configuration (for password reset)
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-email-app-password
 
 # Frontend Base URL (for production)
-VITE_BASE_URL=https://your-production-url.com
+FRONTEND_URL=http://localhost:5173
+
+# Port (optional, defaults to 5000)
+PORT=5000
 ```
 
 ### Running the Application
@@ -118,6 +127,8 @@ npm start
 ### Authentication
 - `POST /api/users/register` - Register a new user
 - `POST /api/users/login` - Login user
+- `POST /api/users/forgot-password` - Request password reset
+- `POST /api/users/reset-password/:token` - Reset password with token
 - `GET /api/users/data` - Get user data (protected)
 
 ### Resumes

@@ -16,12 +16,14 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-  console.log(`Error: ${err.message}`);
-  // Close server & exit process
-  server.close(() => process.exit(1));
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Rejection:', err?.message || err);
+  if (typeof server !== 'undefined' && server && server.close) {
+    server.close(() => process.exit(1));
+  } else {
+    process.exit(1);
+  }
 });
-
 
 
 //DB Connection
@@ -36,18 +38,20 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 //first route home route
-app.get('/', (req, res) => 
+app.get('/', (req, res) =>
 res.send('Server is running'));
 
 app.use('/api/users',userRoutes);
 
 app.use('/api/resumes', resumeRouter);
-app.use('/api/ai',aiRouter)
+app.use('/api/ai',aiRouter);
 
 // Catch all handler: send back index.html for any non-API routes
-app.get('*', (req, res) => {
+// This must be placed AFTER all API routes to avoid conflicts
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
+
 
 
 // Start the server
