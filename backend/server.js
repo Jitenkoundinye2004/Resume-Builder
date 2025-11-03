@@ -50,7 +50,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // CORS configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production'
-    ? process.env.FRONTEND_URL || false
+    ? process.env.FRONTEND_URL || ['https://resume-builder-frontend-8ojy.onrender.com']
     : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
