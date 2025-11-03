@@ -1,0 +1,14 @@
+- [x] Fix state parameter retrieval in Login.jsx by removing extra spaces in query.get('state')
+- [x] Modify handleSubmit in Login.jsx to send only relevant form data based on state (email/password for login, name/email/password for register)
+- [x] Update api.js to include a fallback baseURL if VITE_BASE_URL is not set
+- [x] Test the login and register functionality
+- [x] Fix catch-all route in server.js to use app.get('*') instead of app.use()
+- [x] Create .gitignore files for backend and frontend
+- [x] Create .env.example with all required environment variables
+- [x] Create comprehensive README.md with setup and deployment instructions
+- [x] Update backend package.json scripts (server -> dev)
+- [x] Add error handling for unhandled promise rejections in server.js
+- [x] Optimize Vite config for production builds with code splitting
+- [x] Improve database connection with better error handling
+- [x] Create render.yaml for Render deployment
+- [x] Build frontend for production deployment
