@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL || "http://localhost:5000",
+  baseURL: import.meta.env.VITE_BASE_URL || "https://resume-builder-backend.onrender.com",
   timeout: 30000, // 30 seconds timeout
   headers: {
     'Content-Type': 'application/json'
