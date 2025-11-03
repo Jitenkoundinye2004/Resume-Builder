@@ -84,7 +84,7 @@ app.get('/health', (req, res) => {
 
 // Catch all handler: send back index.html for any non-API routes
 // This must be placed AFTER all API routes to avoid conflicts
-app.get('*', (req, res) => {
+app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
