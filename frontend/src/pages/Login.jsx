@@ -55,7 +55,7 @@ const Login = () => {
       {state === "login" ? "Login" : "Register"}
     </h1>
     <p className="text-zinc-500 dark:text-[#ffffff] text-sm mt-2 pb-6">
-      Please {state === "login" ? "sign in" : "sign up"} to continue
+      Please {state === "register" ? "sign up" : "sign in"} to continue
     </p>
 
     {state !== "login" && (
