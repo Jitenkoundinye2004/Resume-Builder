@@ -50,7 +50,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // CORS configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production'
-    ? process.env.FRONTEND_URL || ['https://resume-builder-frontend-8ojy.onrender.com']
+    ? process.env.FRONTEND_URL || ['https://resume-builder-f.onrender.com']
     : ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -65,67 +65,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// // Serve static files from the frontend dist directory
-// app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-// //first route home route
-// app.get('/', (req, res) =>
-// res.send('Server is running'));
-
-// app.use('/api/users',userRoutes);
-
-// app.use('/api/resumes', resumeRouter);
-// app.use('/api/ai',aiRouter);
-
-// // Health check endpoint
-// app.get('/health', (req, res) => {
-//   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
-// });
-
-// // Catch all handler: send back index.html for any non-API routes
-// // This must be placed AFTER all API routes to avoid conflicts
-// app.use((req, res) => {
-//   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-// });
-
-
-// // ...existing code...
-// // Serve static files from the frontend dist directory
-// app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-// //first route home route
-// app.get('/', (req, res) =>
-//   res.send('Server is running'));
-
-// // api routes
-// app.use('/api/users', userRoutes);
-// app.use('/api/resumes', resumeRouter);
-// app.use('/api/ai', aiRouter);
-
-// // Health check endpoint
-// app.get('/health', (req, res) => {
-//   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
-// });
-
-// // SPA fallback — only for non-API GET requests that accept HTML and are not asset requests
-// app.use((req, res, next) => {
-//   if (req.method !== 'GET') return next();
-
-//   // skip API routes
-//   if (req.path.startsWith('/api')) return next();
-
-//   // skip requests for files (contain a dot like /assets/app.js or /favicon.ico)
-//   if (path.extname(req.path)) return next();
-
-//   // only serve for browsers that accept HTML
-//   if (!req.headers.accept || !req.headers.accept.includes('text/html')) return next();
-
-//   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'), (err) => {
-//     if (err) next(err);
-//   });
-// });
-// // ...existing code..
-// 
 
 // ...existing code...
 // Serve static files from the frontend dist directory
