@@ -2,7 +2,7 @@ services:
   - type: web
     name: resume-builder
     runtime: node
-    buildCommand: cd frontend && npm install && npm run build && cd ../backend && npm install
+    buildCommand: cd frontend && npm install && npm audit fix && npm run build && cd ../backend && npm install
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
