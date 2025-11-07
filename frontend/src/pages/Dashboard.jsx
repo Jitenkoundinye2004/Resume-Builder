@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [resume, setresume] = useState(null)
   const [editResumeId, setEditResumeId] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [creatingResume, setCreatingResume] = useState(false)
 
 
   const navigate = useNavigate()
@@ -36,6 +37,7 @@ const Dashboard = () => {
   const createResume = async (event) => {
     try {
       event.preventDefault()
+      setCreatingResume(true)
       const { data } = await api.post('/api/resumes/create', { title }, { headers: { Authorization: `Bearer ${token}` } })
       setAllResume([...allResume, data.resume])
       setTitle('')
@@ -43,7 +45,8 @@ const Dashboard = () => {
       navigate(`/app/builder/${data.resume._id}`)
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message)
-
+    } finally {
+      setCreatingResume(false)
     }
   }
 
@@ -143,7 +146,10 @@ const Dashboard = () => {
             <div onClick={e => e.stopPropagation()} className='relative bg-slate-50 border shadow-md rounded-lg w-full max-w-sm p-6'>
               <h2 className='text-xl font-bold mb-4'>Create a Resume</h2>
               <input onChange={(e) => { setTitle(e.target.value) }} value={title} type="text" placeholder='Enter resume title' className='w-full px-4 py-2 mb-4 focus:border-green-600 ring-green-600' required />
-              <button className='w-full py-2 bg-[#385A3A] text-white rounded hover:bg-green-700 transition-colors'>Create Resume</button>
+              <button disabled={creatingResume} className='w-full py-2 bg-[#385A3A] text-white rounded hover:bg-green-700 transition-colors flex items-center justify-center gap-2'>
+                {creatingResume && <LoaderCircleIcon className='animate-spin size-4 text-white' />}
+                {creatingResume ? 'Creating...' : 'Create Resume'}
+              </button>
               <XIcon className='absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors' onClick={() => { setShowCreateResume(false); setTitle('') }} />
             </div>
 
