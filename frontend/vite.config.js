@@ -5,11 +5,7 @@ import { copyFileSync } from 'fs'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(),{
-      name: 'copy-redirects',
-      buildEnd() {
-        copyFileSync('public/_redirects', 'dist/_redirects')
-      }}, tailwindcss()],
+  plugins: [react(), tailwindcss()],
   publicDir: 'public',
   build: {
     outDir: 'dist',
