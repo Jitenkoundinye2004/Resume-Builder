@@ -28,5 +28,5 @@ services:
       - key: OPENAI_API_KEY
         sync: false
       - key: FRONTEND_URL
-        sync: false
+        value: https://resume-builder-frontend-l6wa.onrender.com
     healthCheckPath: /health
