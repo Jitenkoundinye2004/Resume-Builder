@@ -21,6 +21,7 @@ const Login = () => {
     });
 
     const [showPassword, setShowPassword] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
 
     const onChangeHandler = (e) => {
@@ -30,6 +31,7 @@ const Login = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+        setLoading(true);
         try {
           const payload = state === "login" ? { email: formdata.email, password: formdata.password } : formdata;
           const {data: responseData}= await api.post(`/api/users/${state}`, payload)
@@ -42,6 +44,8 @@ const Login = () => {
         } catch (error) {
           toast.error(error?.response?.data?.message || error.message)
 
+        } finally {
+          setLoading(false);
         }
 
     };
@@ -121,9 +125,20 @@ const Login = () => {
 
     <button
       type="submit"
-      className="mt-2 w-full h-11 rounded-full font-semibold text-white dark:bg-[#8BAD53] dark:text-[#ffffff] hover:opacity-90 transition-opacity"
+      disabled={loading}
+      className="mt-2 w-full h-11 rounded-full font-semibold text-white dark:bg-[#8BAD53] dark:text-[#ffffff] hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
     >
-      {state === "login" ? "Login" : "Create Account"}
+      {loading ? (
+        <>
+          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {state === "login" ? "Logging in..." : "Creating Account..."}
+        </>
+      ) : (
+        state === "login" ? "Login" : "Create Account"
+      )}
     </button>
 
     <p className="text-zinc-500 dark:text-[#ffffff] text-sm mt-3 mb-11">
