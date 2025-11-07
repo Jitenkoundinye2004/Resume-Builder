@@ -10,6 +10,7 @@ export default defineConfig({
       buildEnd() {
         copyFileSync('public/_redirects', 'dist/_redirects')
       }}, tailwindcss()],
+  publicDir: 'public',
   build: {
     outDir: 'dist',
     sourcemap: false,
