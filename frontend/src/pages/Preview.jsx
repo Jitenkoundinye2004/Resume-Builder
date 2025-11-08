@@ -20,28 +20,46 @@ const Preview = () => {
     }
 
     try {
-      console.log('Loading resume with ID:', resumeId);
+      console.log('=== Loading Public Resume ===');
+      console.log('Resume ID:', resumeId);
       const url = '/api/resumes/public/' + resumeId;
-      console.log('API URL:', url);
-      console.log('Full URL:', API.defaults.baseURL + url);
+      const fullURL = API.defaults.baseURL + url;
+      console.log('API URL (relative):', url);
+      console.log('Full URL:', fullURL);
+      console.log('API Base URL:', API.defaults.baseURL);
       
       const {data} = await API.get(url);
-      console.log('Resume data received:', data);
+      console.log('✅ Resume data received:', data);
       
       if (data && data.resume) {
         setResumeData(data.resume);
+        console.log('✅ Resume loaded successfully');
       } else {
-        console.error('Invalid response format:', data);
+        console.error('❌ Invalid response format:', data);
       }
     } catch (error) {
-      console.error('=== Error loading resume ===');
-      console.error('Error object:', error);
+      console.error('❌ === Error loading resume ===');
+      console.error('Error type:', error.constructor.name);
       console.error('Error message:', error.message);
-      console.error('Response data:', error.response?.data);
-      console.error('Response status:', error.response?.status);
-      console.error('Response headers:', error.response?.headers);
-      console.error('Request URL:', error.config?.url);
-      console.error('Request base URL:', error.config?.baseURL);
+      
+      if (error.response) {
+        // Server responded with error
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+        console.error('Response headers:', error.response.headers);
+        console.error('Request URL:', error.config?.url);
+        console.error('Request base URL:', error.config?.baseURL);
+        console.error('Full request URL:', error.config?.baseURL + error.config?.url);
+      } else if (error.request) {
+        // Request made but no response
+        console.error('No response received');
+        console.error('Request config:', error.config);
+        console.error('This might be a CORS issue or network error');
+      } else {
+        // Error setting up request
+        console.error('Error setting up request:', error.message);
+      }
+      
       console.error('Resume ID:', resumeId);
       
       // Don't set resumeData to null here, let it stay null so error UI shows

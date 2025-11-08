@@ -71,7 +71,13 @@ app.use((req, res, next) => {
 
 // Logging middleware - moved before routes to log all requests
 app.use((req, res, next) => {
-  console.log('REQ', req.method, req.path, 'Accept:', req.headers.accept);
+  console.log('=== REQUEST ===');
+  console.log('Method:', req.method);
+  console.log('Path:', req.path);
+  console.log('Original URL:', req.originalUrl);
+  console.log('Base URL:', req.baseUrl);
+  console.log('Accept:', req.headers.accept);
+  console.log('================');
   next();
 });
 
@@ -87,6 +93,17 @@ app.get('/health', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/resumes', resumeRouter);
 app.use('/api/ai', aiRouter);
+
+// Log registered routes for debugging
+console.log('=== REGISTERED ROUTES ===');
+console.log('API Routes registered:');
+console.log('  - /api/users');
+console.log('  - /api/resumes');
+console.log('  - /api/ai');
+console.log('Resume routes should include:');
+console.log('  - GET /api/resumes/test');
+console.log('  - GET /api/resumes/public/:resumeId');
+console.log('========================');
 
 // Serve static files from the frontend dist directory
 app.use(express.static(path.join(__dirname, '../frontend/dist')));

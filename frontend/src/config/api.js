@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+// Determine base URL - use environment variable or fallback to backend URL
+const baseURL = import.meta.env.VITE_BASE_URL || "https://resume-builder-backend-aspa.onrender.com";
+
+console.log('API Base URL configured:', baseURL);
+console.log('VITE_BASE_URL from env:', import.meta.env.VITE_BASE_URL);
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL || "https://resume-builder-backend-aspa.onrender.com",
+  baseURL: baseURL,
   timeout: 30000, // 30 seconds timeout
   headers: {
     'Content-Type': 'application/json'
