@@ -69,22 +69,27 @@ app.use((req, res, next) => {
 });
 
 
-// ...existing code...
-// Serve static files from the frontend dist directory
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+// Logging middleware - moved before routes to log all requests
+app.use((req, res, next) => {
+  console.log('REQ', req.method, req.path, 'Accept:', req.headers.accept);
+  next();
+});
 
 // first route home route
 app.get('/', (req, res) => res.send('Server is running'));
-
-// api routes
-app.use('/api/users', userRoutes);
-app.use('/api/resumes', resumeRouter);
-app.use('/api/ai', aiRouter);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
+
+// api routes - MUST be before static files middleware
+app.use('/api/users', userRoutes);
+app.use('/api/resumes', resumeRouter);
+app.use('/api/ai', aiRouter);
+
+// Serve static files from the frontend dist directory
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // SPA fallback — use a RegExp GET route to avoid path-to-regexp '*' errors.
 // Serve index.html for non-API, non-asset GET requests that accept HTML.
@@ -100,9 +105,10 @@ app.get(/^(?!\/api).*/, (req, res, next) => {
   });
 });
 
-app.use((req,res,next)=>{
-  console.log('REQ', req.method, req.path, 'Accept:', req.headers.accept);
-  next();
+// 404 handler for unmatched API routes (must be last)
+app.use('/api/*', (req, res) => {
+  console.log('API route not found:', req.method, req.path);
+  res.status(404).json({ message: 'API endpoint not found', path: req.path });
 });
 
 

@@ -62,29 +62,68 @@ export const getResumeById = async (req, res) => {
 };
 
 // get user resume by id public
-// GET: /api/resume/public/:resumeId
+// GET: /api/resumes/public/:resumeId
 export const getPublicResumeById = async (req, res) => {
   try {
     const { resumeId } = req.params;
-    console.log('Public resume request - Resume ID:', resumeId);
+    // Remove any trailing slashes or whitespace
+    const cleanResumeId = resumeId?.trim().replace(/\/$/, '');
+    
+    console.log('=== Public Resume Request ===');
+    console.log('Original Resume ID:', resumeId);
+    console.log('Cleaned Resume ID:', cleanResumeId);
+    console.log('Request Path:', req.path);
+    console.log('Request URL:', req.url);
+    console.log('Request Method:', req.method);
+    
+    // Check if resumeId exists
+    if (!cleanResumeId) {
+      console.log('ERROR: No resume ID provided');
+      return res.status(400).json({ message: "Resume ID is required" });
+    }
     
     // Validate ObjectId format
-    if (!mongoose.Types.ObjectId.isValid(resumeId)) {
-      console.log('Invalid ObjectId format:', resumeId);
-      return res.status(400).json({ message: "Invalid resume ID format" });
+    if (!mongoose.Types.ObjectId.isValid(cleanResumeId)) {
+      console.log('ERROR: Invalid ObjectId format:', cleanResumeId);
+      return res.status(400).json({ 
+        message: "Invalid resume ID format",
+        providedId: cleanResumeId 
+      });
     }
 
-    const resume = await Resume.findOne({ _id: resumeId });
+    console.log('Querying database for resume:', cleanResumeId);
+    const resume = await Resume.findOne({ _id: cleanResumeId });
+    
     if (!resume) {
-      console.log('Resume not found in database:', resumeId);
-      return res.status(404).json({ message: "Resume not found" });
+      console.log('ERROR: Resume not found in database:', cleanResumeId);
+      return res.status(404).json({ 
+        message: "Resume not found",
+        resumeId: cleanResumeId 
+      });
     }
 
-    console.log('Resume found successfully:', resumeId);
+    console.log('Resume found:', cleanResumeId);
+    console.log('Resume title:', resume.title);
+    console.log('Resume public status:', resume.public);
+    
+    // Check if resume is public (optional - remove if you want all resumes accessible)
+    // if (resume.public !== true) {
+    //   console.log('ERROR: Resume is not public:', cleanResumeId);
+    //   return res.status(403).json({ 
+    //     message: "This resume is not publicly accessible",
+    //     resumeId: cleanResumeId 
+    //   });
+    // }
+
+    console.log('SUCCESS: Returning public resume:', cleanResumeId);
     return res.status(200).json({ resume });
   } catch (error) {
-    console.error("Error fetching public resume:", error);
-    return res.status(500).json({ message: "An error occurred while fetching the resume" });
+    console.error("ERROR: Exception in getPublicResumeById:", error);
+    console.error("Error stack:", error.stack);
+    return res.status(500).json({ 
+      message: "An error occurred while fetching the resume",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
 

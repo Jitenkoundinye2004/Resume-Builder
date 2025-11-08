@@ -13,14 +13,38 @@ const Preview = () => {
   const [resumeData, setResumeData] = useState(null);
 
   const loadResume = async () => {
+    if (!resumeId) {
+      console.error('No resume ID provided');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const {data} = await API.get('/api/resumes/public/' + resumeId)
-      setResumeData(data.resume)
+      console.log('Loading resume with ID:', resumeId);
+      const url = '/api/resumes/public/' + resumeId;
+      console.log('API URL:', url);
+      console.log('Full URL:', API.defaults.baseURL + url);
+      
+      const {data} = await API.get(url);
+      console.log('Resume data received:', data);
+      
+      if (data && data.resume) {
+        setResumeData(data.resume);
+      } else {
+        console.error('Invalid response format:', data);
+      }
     } catch (error) {
-      console.error('Error loading resume:', error);
-      console.error('Response:', error.response?.data);
-      console.error('Status:', error.response?.status);
+      console.error('=== Error loading resume ===');
+      console.error('Error object:', error);
+      console.error('Error message:', error.message);
+      console.error('Response data:', error.response?.data);
+      console.error('Response status:', error.response?.status);
+      console.error('Response headers:', error.response?.headers);
+      console.error('Request URL:', error.config?.url);
+      console.error('Request base URL:', error.config?.baseURL);
       console.error('Resume ID:', resumeId);
+      
+      // Don't set resumeData to null here, let it stay null so error UI shows
     } finally {
        setIsLoading(false)
     }
