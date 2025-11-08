@@ -1,7 +1,7 @@
 import { useState, React, useEffect } from 'react'
 import {Link,useParams} from 'react-router-dom'
 import { dummyResumeData } from '../assets/assets.js'
-import { ArrowLeftIcon, Briefcase, ChevronDown, ChevronLeft, ChevronRight, DownloadIcon, EyeIcon, EyeOffIcon, FileText, FolderIcon, GraduationCap, Share2Icon, Sparkles, User } from 'lucide-react'
+import { ArrowLeftIcon, Briefcase, ChevronDown, ChevronLeft, ChevronRight, DownloadIcon, FileText, FolderIcon, GraduationCap, Sparkles, User } from 'lucide-react'
 import PersonalInfoForm from '../Components/PersonalInfoForm.jsx'
 import ResumePreview from '../Components/ResumePreview.jsx'
 import TemplateSelector from '../Components/TemplateSelector.jsx'
@@ -29,7 +29,6 @@ const ResumeBuilder = () => {
     skills:[],
     template:"classic",
     accent_color:"#3882F6",
-    public:false ,
    })
 
    const loadExistingResume = async ()=>{
@@ -63,30 +62,6 @@ const ResumeBuilder = () => {
    useEffect(()=>{
     loadExistingResume()
    },[])
-
-   const changeResumeVisibility = async()=>{
-    try {
-      const {data} =await api.put('/api/resumes/update', { resumeId, resumeData: {public: !resumeData.public} }, {headers:{Authorization:`Bearer ${token}`}})
-      setResumeData({...resumeData,public: !resumeData.public})
-      toast.success(data.message)
-
-    } catch (error) {
-      toast.error(error?.response?.data?.message || error.message)
-      
-    }
-   }
-
-   const handleShare=()=>{
-    const frontendUrl = window.location.href.split('/app/')[0];
-    const resumeUrl = frontendUrl + '/view/' + resumeId;
-
-    if(navigator.share){
-      navigator.share({url:resumeUrl, text:"My Resume",})
-    }else{
-      navigator.clipboard.writeText(resumeUrl);
-      toast.success('Resume link copied to clipboard!');
-    }
-   }
 
    const DownloadResume = ()=>{
     window.print();
@@ -196,23 +171,10 @@ const ResumeBuilder = () => {
               {/* --buttons-- */}
             <div className='relative w-full'>
               <div className='absolute bottom-3 left-0 right-0 flex items-center justify-end gap-2'>
-                {resumeData.public && (
-                  <button onClick={handleShare} className='flex items-center p-2 px-4 gap-2 text-xs bg-gradient-to-br from-blue-100 to-blue-200 text-blue-600 rounded-lg ring-blue-300 hover:ring transition-colors'>
-                    <Share2Icon className='size-4'/>Share
-                  </button>
-                )}
-
-                <button onClick={changeResumeVisibility} className='flex items-center p-2 px-4 gap-2 text-xs bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600  ring-purple-300 rounded-lg hover:ring transition-colors'>
-                  {resumeData.public ? <EyeIcon className='size-4'/>:<EyeOffIcon className='size-4'/>}
-                  {resumeData.public ?'Public':'Private'}
-                </button>
-
                 <button onClick={DownloadResume} className='flex items-center gap-2 px-6 py-2 text-xs bg-gradient-to-br from-green-100 to-green-200 text-green-600 rounded-lg ring-green-300 hiver:ring transition-colors'>
                   <DownloadIcon className='size-4'/>Download
                 </button>
-
               </div>
-
             </div>
 
             {/* --resume preview-- */}
