@@ -22,15 +22,9 @@ const Preview = () => {
     try {
       console.log('=== Loading Public Resume ===');
       console.log('Resume ID:', resumeId);
+      console.log('API Base URL:', API.defaults.baseURL);
       
-      // Use absolute URL to ensure it goes to the backend
-      const apiBaseURL = API.defaults.baseURL || 'https://resume-builder-backend-aspa.onrender.com';
-      const url = `${apiBaseURL}/api/resumes/public/${resumeId}`;
-      
-      console.log('API Base URL:', apiBaseURL);
-      console.log('Full API URL:', url);
-      
-      // Make request with absolute URL
+      // Make request - axios will automatically use the baseURL
       const {data} = await API.get(`/api/resumes/public/${resumeId}`);
       console.log('✅ Resume data received:', data);
       
