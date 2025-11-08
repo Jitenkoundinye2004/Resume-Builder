@@ -14,11 +14,14 @@ const Preview = () => {
 
   const loadResume = async () => {
     try {
-      const {data} =await API.get('/api/resumes/public/'+ resumeId)
+      const {data} = await API.get('/api/resumes/public/' + resumeId)
       setResumeData(data.resume)
     } catch (error) {
-      console.log(error.message)
-    }finally{
+      console.error('Error loading resume:', error);
+      console.error('Response:', error.response?.data);
+      console.error('Status:', error.response?.status);
+      console.error('Resume ID:', resumeId);
+    } finally {
        setIsLoading(false)
     }
   };

@@ -66,14 +66,25 @@ export const getResumeById = async (req, res) => {
 export const getPublicResumeById = async (req, res) => {
   try {
     const { resumeId } = req.params;
+    console.log('Public resume request - Resume ID:', resumeId);
+    
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(resumeId)) {
+      console.log('Invalid ObjectId format:', resumeId);
+      return res.status(400).json({ message: "Invalid resume ID format" });
+    }
+
     const resume = await Resume.findOne({ _id: resumeId });
     if (!resume) {
+      console.log('Resume not found in database:', resumeId);
       return res.status(404).json({ message: "Resume not found" });
     }
 
+    console.log('Resume found successfully:', resumeId);
     return res.status(200).json({ resume });
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    console.error("Error fetching public resume:", error);
+    return res.status(500).json({ message: "An error occurred while fetching the resume" });
   }
 };
 
