@@ -3,21 +3,34 @@ import axios from 'axios';
 // Determine base URL - use environment variable or fallback to backend URL
 // IMPORTANT: Vite replaces import.meta.env at build time, so we need to handle undefined
 const getBaseURL = () => {
+  // Try to get from environment variable (set at build time)
   const envURL = import.meta.env.VITE_BASE_URL;
   const fallbackURL = "https://resume-builder-backend-aspa.onrender.com";
   
+  // Check if we're on the same domain (backend serves frontend)
+  // If current host includes 'backend', use relative URLs
+  const currentHost = window.location.hostname;
+  if (currentHost.includes('resume-builder-backend') || currentHost.includes('localhost')) {
+    // Same server - use relative URLs
+    return '';
+  }
+  
+  // Separate frontend deployment - need absolute URL
   // Check if env URL exists and is not empty
-  if (envURL && envURL.trim() !== '' && envURL !== 'undefined') {
+  if (envURL && typeof envURL === 'string' && envURL.trim() !== '' && envURL !== 'undefined') {
     return envURL;
   }
+  
+  // Use fallback
   return fallbackURL;
 };
 
 const baseURL = getBaseURL();
 
 console.log('=== API Configuration ===');
+console.log('Current hostname:', window.location.hostname);
 console.log('VITE_BASE_URL from env:', import.meta.env.VITE_BASE_URL);
-console.log('Final API Base URL:', baseURL);
+console.log('Final API Base URL:', baseURL || '(relative - same server)');
 console.log('========================');
 
 const API = axios.create({

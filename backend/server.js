@@ -89,6 +89,16 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Simple test endpoint to verify API routing works
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'API is working', 
+    timestamp: new Date().toISOString(),
+    path: req.path,
+    url: req.url
+  });
+});
+
 // Handle CORS preflight requests for all API routes
 app.options(/^\/api\/.*/, (req, res) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin || '*');

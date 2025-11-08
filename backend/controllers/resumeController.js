@@ -65,6 +65,14 @@ export const getResumeById = async (req, res) => {
 // GET: /api/resumes/public/:resumeId
 export const getPublicResumeById = async (req, res) => {
   try {
+    // Log all request details for debugging
+    console.log('=== getPublicResumeById called ===');
+    console.log('req.params:', req.params);
+    console.log('req.path:', req.path);
+    console.log('req.url:', req.url);
+    console.log('req.originalUrl:', req.originalUrl);
+    console.log('req.method:', req.method);
+    
     const { resumeId } = req.params;
     // Remove any trailing slashes or whitespace
     const cleanResumeId = resumeId?.trim().replace(/\/$/, '');
