@@ -105,10 +105,15 @@ app.get(/^(?!\/api).*/, (req, res, next) => {
   });
 });
 
-// 404 handler for unmatched API routes (must be last)
-app.use('/api/*', (req, res) => {
-  console.log('API route not found:', req.method, req.path);
+// 404 handler for unmatched API routes - use regex pattern
+app.use(/^\/api\/.*/, (req, res) => {
+  console.log('404 - API route not found:', req.method, req.path);
   res.status(404).json({ message: 'API endpoint not found', path: req.path });
+});
+
+// 404 handler for all other unmatched routes (must be last)
+app.use((req, res) => {
+  res.status(404).send('Not Found');
 });
 
 
